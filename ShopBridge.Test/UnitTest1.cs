@@ -8,6 +8,8 @@ namespace ShopBridge.Test
         [TestMethod]
         public void TestMethod1()
         {
+
+
         }
     }
 }
