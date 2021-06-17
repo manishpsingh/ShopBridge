@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using ShopBridge.Api.Context;
+using ShopBridge.Api.Services;
 
 namespace ShopBridge.Api
 {
@@ -26,6 +22,19 @@ namespace ShopBridge.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddScoped<IProductService,ProductService>();
+            services.AddOpenApiDocument(c =>
+            {
+                c.Title = "My API";
+            });
+           
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +51,10 @@ namespace ShopBridge.Api
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            //Register the Swagger generator      
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
         }
     }
 }
