@@ -15,8 +15,5 @@ namespace ShopBridge.Api.Context
         }
         public DbSet<Product> Products { get; set; }
 
-
-
-
     }
 }

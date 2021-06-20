@@ -6,9 +6,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ShopBridge.Api.Context;
 using ShopBridge.Api.Services;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShopBridge.Api
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)

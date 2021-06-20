@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ShopBridge.Api.Models;
@@ -11,16 +12,15 @@ namespace ShopBridge.Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
-        
+
         public ProductController(IProductService productService)
         {
             _productService = productService;
         }
         // GET: api/<ProductsController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<List<Product>>> Get()
         {
-
             try
             {
                 var products = await _productService.GetProductsAsync();
@@ -38,7 +38,7 @@ namespace ShopBridge.Api.Controllers
 
         // GET api/<ProductsController>/5
         [HttpGet("int:Guid")]
-        public async Task<ActionResult> Get(Guid id)
+        public async Task<ActionResult<Product>> Get(Guid id)
         {
             try
             {
@@ -92,10 +92,12 @@ namespace ShopBridge.Api.Controllers
                     if (result != null)
                     {
                         product.Id = id;
-
-                        await _productService.UpdateProductAsync(product);
+                      return  await _productService.UpdateProductAsync(product);
                     }
-                    return NotFound("Product not found");
+                    else
+                    {
+                        return NotFound("Product not found");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -125,7 +127,6 @@ namespace ShopBridge.Api.Controllers
             {
                 var product = await _productService.GetProductAsync(id);
                 if (product != null)
-
                     result = await _productService.DeleteProductAsync(id);
                 if (result == 0)
                     return BadRequest();
